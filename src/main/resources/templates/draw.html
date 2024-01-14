@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Draw Cards</title>
+</head>
+<body>
+    <h1>Cards Drawn</h1>
+    <div th:each="card : ${deck.cards}">
+        <img th:src="${card.image}" alt="Card image">
+        <p th:text="'Value: ' + ${card.value} + ', Suit: ' + ${card.suit}"></p>
+    </div>
+    <p th:text="'Remaining cards: ' + ${deck.remaining}"></p>
+</body>
+</html>

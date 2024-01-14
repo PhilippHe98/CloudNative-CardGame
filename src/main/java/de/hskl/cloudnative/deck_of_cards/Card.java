@@ -1,0 +1,17 @@
+package de.hskl.cloudnative.deck_of_cards;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Card {
+    private String image;
+    private String value;
+    private String suit;
+    private String code;
+}

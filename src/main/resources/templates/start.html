@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Starting Page</title>
+</head>
+
+<body>
+    <h1>Game Started</h1>
+    <div th:if="${deck != null}">
+        <p th:text="'Deck ID: ' + ${deck.deck_id}"></p>
+        <p th:text="'Remaining cards: ' + ${deck.remaining}"></p>
+    </div>
+
+    <h1>Game State Information</h1>
+
+    <div th:if="${gamestate != null}">
+        <p th:text="'Game ID: ' + ${gamestate.id}"></p>
+        <p th:text="'Player: ' + ${gamestate.user.firstName} + ' ' + ${gamestate.user.lastName}"></p>
+        <p th:text="'Deck ID: ' + ${gamestate.deck.deck_id} + ' Remaining: ' + ${gamestate.deck.remaining}"></p>
+    </div>
+
+    <h1>All Games</h1>
+
+    <div th:if="${games != null}">
+        <div th:each="game : ${games}">
+            <p th:text="'Game ID: ' + ${game.id}"></p>
+            <p th:text="'Player: ' + ${game.user.firstName} + ' ' + ${game.user.lastName}"></p>
+            <div th:if="${game.deck != null}">
+                <p th:text="'Deck ID: ' + ${game.deck.deck_id} + ' Remaining: ' + ${game.deck.remaining}"></p>
+            </div>
+            <form action="start/playGame" method="get">
+                <input type="hidden" name="gameId" th:value="${game.id}" />
+                <input type="submit" value="Play" />
+            </form>
+            <br>
+        </div>
+    </div>
+
+    <form action="start/newGame" method="post">
+        <input type="submit" value="Neues Spiel erstellen">
+    </form>
+</body>
+
+</html>
