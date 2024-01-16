@@ -28,17 +28,17 @@ public class TestDataConfig {
                     .build();
 
             AuthUser writerUser = AuthUser.builder()
-                    .firstName("Writer")
-                    .lastName("User")
-                    .email("writer@example.com")
+                    .firstName("User")
+                    .lastName("1")
+                    .email("user1@example.com")
                     .password(passwordEncoder.encode("pass"))
-                    .roles(new HashSet<>(List.of("ROLE_PLAYER")))
+                    .roles(new HashSet<>(List.of("ROLE_USER")))
                     .build();
 
             AuthUser defaultUser = AuthUser.builder()
-                    .firstName("Default")
-                    .lastName("User")
-                    .email("default@example.com")
+                    .firstName("User")
+                    .lastName("2")
+                    .email("user2@example.com")
                     .password(passwordEncoder.encode("pass"))
                     .roles(new HashSet<>(List.of("ROLE_USER")))
                     .build();

@@ -68,4 +68,7 @@ public class AuthUser implements UserDetails {
         this.roles = roles;
     }
 
+    public void addRole(String role) {
+        roles.add(role);
+    }
 }

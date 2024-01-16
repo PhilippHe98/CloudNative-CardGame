@@ -61,11 +61,19 @@ public class GameController {
     }
 
     @GetMapping("/play")
-    public String redirectToGame(@RequestParam("gameId") String gameId, @ModelAttribute GameState game, Model model) {
-        GameState gameState = gameStateService.find(gameId);
-        model.addAttribute("deck", gameState.getDeck());
-        model.addAttribute("gamestate", gameState);
-        return "play";
+    public String redirectToGame(@RequestParam("gameId") String gameId, Model model) {
+        GameState game = gameStateService.find(gameId);
+        AuthUser currentUser = userService.getCurrentUser();
+
+        // Prüft autorisierung
+        if (game.getUser().getEmail().equals(currentUser.getUsername())) {
+            model.addAttribute("deck", game.getDeck());
+            model.addAttribute("gamestate", game);
+            return "play";
+        }
+
+        return "redirect:/game/start";
+
     }
 
     @GetMapping("/play/drawCards")
@@ -92,13 +100,4 @@ public class GameController {
     public String backToHomepage() {
         return "redirect:/game/start";
     }
-
-    @Controller
-    public static class initController {
-        @GetMapping("/")
-        public String init() {
-            return "redirect:/game/start";
-        }
-    }
-
 }

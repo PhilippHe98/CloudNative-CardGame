@@ -20,10 +20,8 @@ public class SecurityConfig {
     public SecurityFilterChain customFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth // TODO: Add security rules
-                        .requestMatchers("/user/register", "/error", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        // .requestMatchers("/create-note").hasRole("WRITER")
-                        // .requestMatchers("/delete-note").hasAnyRole("ADMIN","WRITER")
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/account/register**", "/error", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(EndpointRequest.toAnyEndpoint().excluding("health")).hasRole("ADMIN")  // Restrict access to other Actuator endpoints
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())

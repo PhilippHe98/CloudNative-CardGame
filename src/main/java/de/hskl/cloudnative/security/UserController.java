@@ -1,23 +1,65 @@
 package de.hskl.cloudnative.security;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
-@RestController
-@RequestMapping("/user")
+@Controller
+@RequestMapping("/account")
 @AllArgsConstructor
 public class UserController {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @GetMapping("/register")
+    public String register(Model model, @RequestParam(required = false) String error) {
+        model.addAttribute("user", new AuthUser());
+        model.addAttribute("error", error);
+        return "registration";
+    }
+
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody AuthUser user)  {
+    public String register(@Valid @ModelAttribute AuthUser user, BindingResult result) {
+
+        System.out.println(user);
+
+        if (result.hasErrors()) {
+            System.out.println("Error binding user: " + result.getAllErrors());
+            return "redirect:/account/register?error=true";
+        }
+        try {
+            if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+                System.out.println("Email already exists");
+                return "redirect:/account/register?error=true";
+            }
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.addRole("ROLE_USER");
+            userRepository.save(user);
+            return "redirect:/game/start";
+        } catch (Exception e) {
+            return "redirect:/account/register?error=true";
+        }
+
+    }
+
+    @PostMapping("/user/register")
+    public ResponseEntity<String> registerUser(@RequestBody AuthUser user) {
         System.out.println(user);
         try {
             if (userRepository.findByEmail(user.getEmail()).isPresent()) {
@@ -28,6 +70,14 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+    
+    @Controller
+    public static class initController {
+        @GetMapping("/")
+        public String init() {
+            return "redirect:/game/start";
         }
     }
 }
