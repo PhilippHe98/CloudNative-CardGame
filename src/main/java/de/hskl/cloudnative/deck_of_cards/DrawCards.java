@@ -15,5 +15,5 @@ public class DrawCards {
     private boolean success;
     private String deck_id;
     private List<Card> cards;
-    private int remaining;
+    private String remaining;
 }

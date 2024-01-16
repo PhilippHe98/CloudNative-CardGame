@@ -32,7 +32,7 @@ public class TestDataConfig {
                     .lastName("User")
                     .email("writer@example.com")
                     .password(passwordEncoder.encode("pass"))
-                    .roles(new HashSet<>(List.of("ROLE_WRITER")))
+                    .roles(new HashSet<>(List.of("ROLE_PLAYER")))
                     .build();
 
             AuthUser defaultUser = AuthUser.builder()

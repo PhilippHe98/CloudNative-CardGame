@@ -21,11 +21,10 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth // TODO: Add security rules
-                        // .requestMatchers("/user/register", "/error", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/user/register", "/error", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         // .requestMatchers("/create-note").hasRole("WRITER")
                         // .requestMatchers("/delete-note").hasAnyRole("ADMIN","WRITER")
-                        // .requestMatchers(EndpointRequest.to("health")).permitAll()  // Allow access to Actuator Health endpoint
-                        // .requestMatchers(EndpointRequest.toAnyEndpoint().excluding("health")).hasRole("ADMIN")  // Restrict access to other Actuator endpoints
+                        .requestMatchers(EndpointRequest.toAnyEndpoint().excluding("health")).hasRole("ADMIN")  // Restrict access to other Actuator endpoints
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())

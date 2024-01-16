@@ -23,4 +23,11 @@ public class GameStateService {
     public List<GameState> findAllGames() {
         return gameStateRepository.findAll();
     }
+
+    public boolean delete(String gameId) {
+        if (gameId == null)
+            return false;
+        gameStateRepository.deleteById(gameId);
+        return true;
+    }
 }

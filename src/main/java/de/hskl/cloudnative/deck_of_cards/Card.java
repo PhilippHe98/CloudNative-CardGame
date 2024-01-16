@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Card {
+    private String code;
     private String image;
     private String value;
     private String suit;
-    private String code;
+    
 }

@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CloudnativeApplication {
 
 	public static void main(String[] args) {
+		// http://localhost:8080/swagger-ui/index.html for endpoint documentation
 		SpringApplication.run(CloudnativeApplication.class, args);
 	}
 

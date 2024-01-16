@@ -2,9 +2,11 @@ package de.hskl.cloudnative.deck_of_cards;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +31,7 @@ public class GameController {
         return "start";
     }
 
-    @PostMapping("/start/newGame")
+    @PostMapping("/start/create-game")
     public String startNewGame(Model model) {
         Deck currentDeck = deckService.createNewDeck();
         AuthUser currentUser = userService.getCurrentUser();
@@ -42,25 +44,61 @@ public class GameController {
         model.addAttribute("gamestate", gameState);
         return "redirect:/game/start";
     }
-    
-    @GetMapping("/start/playGame")
-    public String redirectToGame(@RequestParam("gameId") String gameId, Model model) {
+
+    @PostMapping("/start/delete-game")
+    public String deleteGame(@RequestParam String gameId) {
+
+        GameState game = gameStateService.find(gameId);
+        AuthUser currentUser = userService.getCurrentUser();
+
+        // Prüft autorisierung
+        if (game.getUser().getEmail().equals(currentUser.getUsername())
+                || currentUser.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            gameStateService.delete(gameId);
+        }
+
+        return "redirect:/game/start";
+    }
+
+    @GetMapping("/play")
+    public String redirectToGame(@RequestParam("gameId") String gameId, @ModelAttribute GameState game, Model model) {
         GameState gameState = gameStateService.find(gameId);
         model.addAttribute("deck", gameState.getDeck());
         model.addAttribute("gamestate", gameState);
         return "play";
     }
-    
-    @GetMapping("start/drawCards")
+
+    @GetMapping("/play/drawCards")
     public String drawCards(@RequestParam("gameId") String gameId, @RequestParam("count") int count, Model model) {
-        //TODO: Update gamestate
+        // Get the deck from game
         GameState gameState = gameStateService.find(gameId);
         Deck currentDeck = gameState.getDeck();
+
+        // Draw Cards from current deck
         DrawCards cardsDrawn = deckService.drawCardsFromDeck(currentDeck.getDeck_id(), count);
         List<Card> cards = cardsDrawn.getCards();
+
+        // Update the game state with the drawn cards
+        currentDeck.setRemaining(cardsDrawn.getRemaining());
+        gameStateService.save(gameState);
+
         model.addAttribute("gamestate", gameState);
         model.addAttribute("deck", currentDeck);
         model.addAttribute("cards", cards);
         return "play";
     }
+
+    @GetMapping("/play/backToHomepage")
+    public String backToHomepage() {
+        return "redirect:/game/start";
+    }
+
+    @Controller
+    public static class initController {
+        @GetMapping("/")
+        public String init() {
+            return "redirect:/game/start";
+        }
+    }
+
 }

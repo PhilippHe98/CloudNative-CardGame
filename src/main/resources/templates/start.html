@@ -29,15 +29,23 @@
             <div th:if="${game.deck != null}">
                 <p th:text="'Deck ID: ' + ${game.deck.deck_id} + ' Remaining: ' + ${game.deck.remaining}"></p>
             </div>
-            <form action="start/playGame" method="get">
-                <input type="hidden" name="gameId" th:value="${game.id}" />
-                <input type="submit" value="Play" />
-            </form>
+
+            <div style="display: flex; flex-wrap: wrap;">
+                <form action="play" method="get" style="margin-right: 10px;">
+                    <input type="hidden" name="gameId" th:value="${game.id}" />
+                    <input type="submit" value="Play" />
+                </form>
+                <form action="start/delete-game" method="post" th:object="${game}">
+                    <input type="hidden" name="gameId" th:value="${game.id}" />
+                    <input type="submit" value="Delete" />
+                </form>
+            </div>
+
             <br>
         </div>
     </div>
 
-    <form action="start/newGame" method="post">
+    <form action="start/create-game" method="post">
         <input type="submit" value="Neues Spiel erstellen">
     </form>
 </body>

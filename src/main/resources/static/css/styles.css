@@ -1,0 +1,17 @@
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.card {
+    margin: 1pt;
+    width: 200px;
+    height: auto;
+}
+
+.back-button {
+    position: fixed;
+    top: 10pt;
+    right: 10pt;
+}
