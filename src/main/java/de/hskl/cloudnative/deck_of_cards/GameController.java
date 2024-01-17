@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import de.hskl.cloudnative.deck_of_cards.models.Card;
+import de.hskl.cloudnative.deck_of_cards.models.Deck;
+import de.hskl.cloudnative.deck_of_cards.models.DrawCards;
+import de.hskl.cloudnative.deck_of_cards.models.GameState;
+import de.hskl.cloudnative.deck_of_cards.service.DeckService;
+import de.hskl.cloudnative.deck_of_cards.service.GameStateService;
 import de.hskl.cloudnative.security.AuthUser;
 import de.hskl.cloudnative.security.UserService;
 import lombok.AllArgsConstructor;

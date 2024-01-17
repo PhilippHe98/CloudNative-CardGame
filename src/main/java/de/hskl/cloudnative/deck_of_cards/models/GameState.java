@@ -1,4 +1,4 @@
-package de.hskl.cloudnative.deck_of_cards;
+package de.hskl.cloudnative.deck_of_cards.models;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

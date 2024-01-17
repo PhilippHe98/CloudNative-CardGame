@@ -1,6 +1,8 @@
-package de.hskl.cloudnative.deck_of_cards;
+package de.hskl.cloudnative.deck_of_cards.models;
 
 import java.util.List;
+
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +11,13 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class DrawCards {
+@AllArgsConstructor
+@Document("deck")
+public class Deck {
     private boolean success;
     private String deck_id;
-    private List<Card> cards;
+    private boolean shuffled;
     private String remaining;
+    private List<Card> cards;
 }

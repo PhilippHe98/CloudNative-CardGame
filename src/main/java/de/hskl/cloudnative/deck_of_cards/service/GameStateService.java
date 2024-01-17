@@ -1,9 +1,11 @@
-package de.hskl.cloudnative.deck_of_cards;
+package de.hskl.cloudnative.deck_of_cards.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import de.hskl.cloudnative.deck_of_cards.models.GameState;
+import de.hskl.cloudnative.deck_of_cards.repositories.GameStateRepository;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

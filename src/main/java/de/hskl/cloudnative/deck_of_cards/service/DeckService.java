@@ -1,8 +1,11 @@
-package de.hskl.cloudnative.deck_of_cards;
+package de.hskl.cloudnative.deck_of_cards.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import de.hskl.cloudnative.deck_of_cards.models.Deck;
+import de.hskl.cloudnative.deck_of_cards.models.DrawCards;
 
 @Service
 public class DeckService {

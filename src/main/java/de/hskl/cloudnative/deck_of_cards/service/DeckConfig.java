@@ -1,4 +1,4 @@
-package de.hskl.cloudnative.deck_of_cards;
+package de.hskl.cloudnative.deck_of_cards.service;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

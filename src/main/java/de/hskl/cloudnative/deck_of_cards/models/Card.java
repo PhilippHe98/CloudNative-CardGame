@@ -1,4 +1,4 @@
-package de.hskl.cloudnative.deck_of_cards;
+package de.hskl.cloudnative.deck_of_cards.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
