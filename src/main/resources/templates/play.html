@@ -5,30 +5,45 @@
 <head>
     <title>Card Game</title>
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <script th:src="@{/js/game.js}"></script>
 </head>
-
-<div>
-    <form action="/game/play/drawCards" method="get">
-        <input type="hidden" name="gameId" th:value="${gamestate.id}" />
-        <input type="number" id="count" name="count" min="1" max="52" />
-        <input type="submit" value="Draw Cards" />
-    </form>
-
-    <form action="/game/play/backToHomepage" method="get">
-        <button type="submit" class="back-button">Back to homepage</button>
-    </form>
-</div>
-
 
 <body>
     <h1 th:text="'Game: ' + ${gamestate.id}"></h1>
     <p th:text="'Remaining cards in deck: ' + ${gamestate.deck.remaining}"></p>
 
+    <div>
+        <form action="/game/play/drawCards" method="get">
+            <input type="hidden" name="gameId" th:value="${gamestate.id}" />
+            <input type="number" id="count" name="count" min="1" max="52" />
+            <input type="submit" value="Draw Cards" />
+        </form>
+
+        <form action="/game/play/backToHomepage" method="get">
+            <button type="submit" class="back-button">Back to homepage</button>
+        </form>
+    </div>
+
+    <p>5 Gleiche: 16x</p>
+    <p>4 Gleiche: 8x</p>
+    <p>Full House: 5x</p>
+    <p>Drei Gleiche: 3x</p>
+    <p>Zwei Gleiche: 2x</p>
+    <br>
+    <p>Ass > König > Dame > Bube > 10 > 9</p>
+
     <div class="card-container" th:if="${cards != null}">
         <div th:each="card : ${cards}">
-            <img th:src="${card.image}" alt="Card image" class="card">
+            <img th:src="${card.image}" th:id="'card-'+${card.handPositionId}" alt="Card image" class="card"
+                onclick=selectCard(this.id) th:data-card-code="${card.code}">
         </div>
     </div>
+
+    <form action="/game/play/exchangeCards" method="get" onsubmit="getSelectedCardCodes(); removeCards();">
+        <input type="hidden" name="gameId" th:value="${gamestate.id}" />
+        <input type="hidden" id="cardCodes" name="cardCodes"/>
+        <button type="submit" class="exchange-button">Karten austauschen</button>
+    </form>
 
 </body>
 

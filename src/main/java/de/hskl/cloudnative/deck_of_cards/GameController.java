@@ -2,11 +2,9 @@ package de.hskl.cloudnative.deck_of_cards;
 
 import java.util.List;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,7 +37,8 @@ public class GameController {
 
     @PostMapping("/start/create-game")
     public String startNewGame(Model model) {
-        Deck currentDeck = deckService.createNewDeck();
+        // Deck currentDeck = deckService.createNewDeck();
+        Deck currentDeck = deckService.createPartialDeck("new", "9H,9H,9H,9H,9H,0S,0S,0S,0S,0S,JD,JD,JD,JD,JD,QC,QC,QC,QC,QC,KH,KH,KH,KH,KH,AS,AS,AS,AS,AS");
         AuthUser currentUser = userService.getCurrentUser();
         GameState gameState = GameState.builder()
                 .deck(currentDeck)
@@ -92,6 +91,11 @@ public class GameController {
         DrawCards cardsDrawn = deckService.drawCardsFromDeck(currentDeck.getDeck_id(), count);
         List<Card> cards = cardsDrawn.getCards();
 
+        // Gives Every Card a id for the hand, card with smallest id is the first card
+        for(int i = 0; i < cards.size(); i++) {
+            cards.get(i).setHandPositionId(i);
+        }
+
         // Update the game state with the drawn cards
         currentDeck.setRemaining(cardsDrawn.getRemaining());
         gameStateService.save(gameState);
@@ -100,6 +104,20 @@ public class GameController {
         model.addAttribute("deck", currentDeck);
         model.addAttribute("cards", cards);
         return "play";
+    }
+    @GetMapping("/play/exchangeCards")
+    public String exchangeCards(@RequestParam("gameId") String gameId, @RequestParam("cardCodes") String cards, Model model) {
+        GameState gameState = gameStateService.find(gameId);
+        Deck currentDeck = gameState.getDeck();
+        Deck deckInfo = deckService.returnCardsToDeck(currentDeck.getDeck_id(), cards);
+
+        currentDeck.setRemaining(deckInfo.getRemaining());
+        gameStateService.save(gameState);
+
+        int numberOfCards = cards.split(",").length;
+
+        // TODO: need to save not selected cards somehow
+        return "redirect:/game/play/drawCards?gameId=" + gameId + "&count=" + numberOfCards;
     }
 
     @GetMapping("/play/backToHomepage")

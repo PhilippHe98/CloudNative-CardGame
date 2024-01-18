@@ -15,3 +15,7 @@
     top: 10pt;
     right: 10pt;
 }
+
+.selected {
+    border: 2px solid yellow;
+}

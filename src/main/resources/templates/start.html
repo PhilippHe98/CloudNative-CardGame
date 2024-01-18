@@ -6,7 +6,6 @@
 </head>
 
 <body>
-    <h1>Game Started</h1>
     <div th:if="${deck != null}">
         <p th:text="'Deck ID: ' + ${deck.deck_id}"></p>
         <p th:text="'Remaining cards: ' + ${deck.remaining}"></p>

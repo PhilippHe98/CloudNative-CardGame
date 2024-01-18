@@ -6,14 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class Card {
-    private String code;
-    private String image;
-    private String value;
-    private String suit;
-    private int handPositionId;
-    
+@NoArgsConstructor
+@Builder
+public class Pile {
+    private String deck_id;
+    private String remaining;
+    private String pile_name;
 }
