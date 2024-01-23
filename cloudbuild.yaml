@@ -20,4 +20,4 @@
   - 'gcr.io/$PROJECT_ID/SERVICE-NAME:$COMMIT_SHA'
   logsBucket: '${_LOGS_BUCKET_NAME}'
   options:
-    logging: GCS_ONLY
+    logging: CLOUD_LOGGING_ONLY
