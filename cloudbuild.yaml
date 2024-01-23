@@ -11,7 +11,7 @@
     args:
     - 'run'
     - 'deploy'
-    - 'cloudnative-412114'
+    - 'cloudnative-cardgame'
     - '--image'
     - 'gcr.io/$PROJECT_ID/SERVICE-NAME:$COMMIT_SHA'
     - '--region'
