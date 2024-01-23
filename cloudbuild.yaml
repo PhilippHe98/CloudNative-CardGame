@@ -18,3 +18,5 @@
     - 'europe-west1'
   images:
   - 'gcr.io/$PROJECT_ID/SERVICE-NAME:$COMMIT_SHA'
+  options:
+    logging: CLOUD_LOGGING_ONLY
