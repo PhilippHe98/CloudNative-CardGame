@@ -16,4 +16,13 @@ public class DrawCards {
     private String deck_id;
     private List<Card> cards;
     private String remaining;
+
+
+    public String createStringOfCards() {
+        String cards = "";
+        for (Card card : this.cards) {
+            cards += card.getCode() + ",";
+        }
+        return cards.substring(0, cards.length() - 1);
+    }
 }

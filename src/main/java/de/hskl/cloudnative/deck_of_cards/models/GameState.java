@@ -1,5 +1,7 @@
 package de.hskl.cloudnative.deck_of_cards.models;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,4 +21,7 @@ public class GameState {
     private String id;
     private Deck deck;
     private AuthUser user;
+    private List<Card> player_hand;
+    private List<Card> opponent_hand;
+    private String coins;
 }

@@ -32,19 +32,26 @@
     <br>
     <p>Ass > König > Dame > Bube > 10 > 9</p>
 
-    <div class="card-container" th:if="${cards != null}">
-        <div th:each="card : ${cards}">
-            <img th:src="${card.image}" th:id="'card-'+${card.handPositionId}" alt="Card image" class="card"
-                onclick=selectCard(this.id) th:data-card-code="${card.code}">
+
+    <div class="opponent-card-container" th:if="${opponent_hand != null}">
+        <div th:each="card : ${opponent_hand}">
+            <img id="card-back" src="https://www.deckofcardsapi.com/static/img/back.png" class="card"></img>
+            <img id="card-front" th:src="${card.image}" class="card"></img>
         </div>
     </div>
 
     <form action="/game/play/exchangeCards" method="get" onsubmit="getSelectedCardCodes(); removeCards();">
         <input type="hidden" name="gameId" th:value="${gamestate.id}" />
-        <input type="hidden" id="cardCodes" name="cardCodes"/>
-        <button type="submit" class="exchange-button">Karten austauschen</button>
+        <input type="hidden" id="cardCodes" name="cardCodes" />
+        <button type="submit" class="exchange-button" id="exchange-button">Karten halten</button>
     </form>
 
+    <div class="card-container" th:if="${player_hand != null}">
+        <div th:each="card : ${player_hand}">
+            <img th:src="${card.image}" th:id="'card-'+${card.handPositionId}" alt="Card image" class="card"
+                onclick=selectCard(this.id) th:data-card-code="${card.code}">
+        </div>
+    </div>
 </body>
 
 </html>

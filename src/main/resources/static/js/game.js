@@ -1,5 +1,25 @@
 var selectedCards = [];
 
+window.onload = function() {
+    document.getElementById("exchange-button").addEventListener("click", function() {
+        var cardBack = document.getElementById("card-back");
+        var cardFront = document.getElementById("card-front");
+        cardBack.style.display = "none";
+        cardFront.style.display = "block";
+        console.log("clicked");
+    });
+}
+
+function setSelectButtonValue() {
+    var selectButton = document.getElementById("exchange-button");
+    console.log(selectedCards.length);
+    if(selectedCards.length == 0) {
+        selectButton.textContent = "Karten halten";
+    } else {    
+        selectButton.textContent = "Karten austauschen";
+    }
+}
+
 function selectCard(cardId) {
     // Fügt die Karte zur Liste der ausgewählten Karten hinzu oder entfernt sie
     var index = selectedCards.indexOf(cardId);
@@ -15,6 +35,7 @@ function selectCard(cardId) {
             console.log(selectedCardElement.dataset.cardCode);
         }
     }
+    setSelectButtonValue();
 }
 
 function removeCards() {
@@ -44,4 +65,5 @@ function getSelectedCardCodes() {
     var cardCodesInput = document.getElementById('cardCodes');
     cardCodesInput.value = cardCodes;
 }
+
 

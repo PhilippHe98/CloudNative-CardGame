@@ -1,7 +1,32 @@
 .card-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin-right: 50pt;
+}
+
+.exchange-button {
+    position: fixed;
+    right: 350pt;
+    bottom: 230pt; /* Adjust this value based on the height of your cards */
+    width: 200pt; /* Adjust this value to change the width of the button */
+    height: 50pt; /* Adjust this value to change the height of the button */
+    font-size: 20pt; /* Adjust this value to change the font size of the button text */
+}
+
+.opponent-card-container {
+    display: flex;
+    flex-direction: row;
     justify-content: flex-start;
+    align-items: flex-end;
+    position: fixed;
+    right: 0;
+    bottom: 360pt;
+    margin-right: 50pt;
 }
 
 .card {
@@ -18,4 +43,12 @@
 
 .selected {
     border: 2px solid yellow;
+}
+
+#card-front {
+    display: none;
+}
+
+#card-back {
+    display: block;
 }

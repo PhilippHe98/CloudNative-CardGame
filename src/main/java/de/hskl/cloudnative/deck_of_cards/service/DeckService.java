@@ -31,11 +31,11 @@ public class DeckService {
     }
 
     public Pile createPile(String deckId, String pileName, String cards) {
-        String url = apiUrl + "/" + deckId + "/pile/" + pileName + "/add/?cards="+cards;
+        String url = apiUrl + "/" + deckId + "/pile/" + pileName + "/add/?cards=" + cards;
         return restTemplate.getForObject(url, Pile.class);
     }
 
-    public Deck createPartialDeck(String deckId, String cards) {
+    public Deck createPartialDeck(String cards) {
         String url = apiUrl + "/new/shuffle/?cards=" + cards;
         return restTemplate.getForObject(url, Deck.class);
     }
@@ -44,5 +44,4 @@ public class DeckService {
         String url = apiUrl + "/" + deckId + "/return/?cards=" + cards;
         return restTemplate.getForObject(url, Deck.class);
     }
-
 }

@@ -19,5 +19,6 @@ public class Deck {
     private String deck_id;
     private boolean shuffled;
     private String remaining;
+    private List<Pile> piles;
     private List<Card> cards;
 }
