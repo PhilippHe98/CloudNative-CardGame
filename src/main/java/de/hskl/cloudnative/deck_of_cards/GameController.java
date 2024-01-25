@@ -76,10 +76,8 @@ public class GameController {
             return "redirect:/game/start";
         }
 
-        // model.addAttribute("deck", game.getDeck());
-        // model.addAttribute("gamestate", game);
-
         Deck currentDeck = game.getDeck();
+        deckService.shuffleDeck(currentDeck.getDeck_id()); // Shuffle the deck
 
         // Draw 5 cards from the deck for the player
         DrawCards cardsDrawn = deckService.drawCardsFromDeck(currentDeck.getDeck_id(), 5);
@@ -100,6 +98,7 @@ public class GameController {
         for (int i = 0; i < player_hand.size(); i++) {
             player_hand.get(i).setHandPositionId(i);
         }
+        sortCards(opponent_hand);
 
         model.addAttribute("deck", currentDeck);
         model.addAttribute("gamestate", game);
@@ -137,16 +136,66 @@ public class GameController {
     @GetMapping("/play/exchangeCards")
     public String exchangeCards(@RequestParam("gameId") String gameId, @RequestParam("cardCodes") String cards,
             Model model) {
+
         GameState gameState = gameStateService.find(gameId);
         Deck currentDeck = gameState.getDeck();
         Deck deckInfo = deckService.returnCardsToDeck(currentDeck.getDeck_id(), cards);
 
-        currentDeck.setRemaining(deckInfo.getRemaining());
-        gameStateService.save(gameState);
+        if (!cards.equals("")) {
+            // Split the cards to exchange
+            String[] cardsToExchange = cards.split(",");
+            int numberOfCardsToExchange = cardsToExchange.length;
 
-        int numberOfCards = cards.split(",").length;
+            // Draw new cards from deck
+            DrawCards drawCards = deckService.drawCardsFromDeck(deckInfo.getDeck_id(), numberOfCardsToExchange);
+            List<Card> newCards = drawCards.getCards();
 
-        return "redirect:/game/play/drawCards?gameId=" + gameId + "&count=" + numberOfCards;
+            List<Card> player_hand = gameState.getPlayer_hand();
+
+            // Remove Cards to exchange from player hand
+            for (int i = 0; i < numberOfCardsToExchange; i++) {
+                for (int j = 0; j < player_hand.size(); j++) {
+                    if (cardsToExchange[i].equals(player_hand.get(j).getCode())) {
+                        player_hand.remove(j);
+                        break;
+                    }
+                }
+            }
+
+            // Add new cards to player hand and update game state
+            player_hand.addAll(newCards);
+            sortCards(player_hand);
+            
+            for (int i = 0; i < player_hand.size(); i++) {
+                player_hand.get(i).setHandPositionId(i);
+            }
+
+            gameState.setPlayer_hand(player_hand);
+            currentDeck.setRemaining(deckInfo.getRemaining());
+            gameStateService.save(gameState);
+        }
+
+        List<Card> oppnent_hand = gameState.getOpponent_hand();
+        sortCards(oppnent_hand);
+
+        model.addAttribute("gamestate", gameState);
+        model.addAttribute("deck", currentDeck);
+        model.addAttribute("player_hand", gameState.getPlayer_hand());
+        model.addAttribute("opponent_hand", oppnent_hand);
+        return "play";
+
+        // return "redirect:/game/play/drawCards?gameId=" + gameId + "&count=" +
+        // numberOfCardsToExchange;
+    }
+
+    // TODO: Implementieren
+    public String compareCards(Model model, String player_hand, String opponent_hand) {
+        // Prüfe, welche Karten besser sind
+        // 5 gleiche Karten > 4 gleiche Karten > Full House > 3 gleiche Karten > 2
+        // gleiche Karten > 1 gleiche Karte
+        // Ace > King > Queen > Jack > 10 > 9
+
+        return "play";
     }
 
     @GetMapping("/play/backToHomepage")

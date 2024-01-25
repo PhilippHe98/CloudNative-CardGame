@@ -13,11 +13,11 @@
     <p th:text="'Remaining cards in deck: ' + ${gamestate.deck.remaining}"></p>
 
     <div>
-        <form action="/game/play/drawCards" method="get">
+        <!-- <form action="/game/play/drawCards" method="get">
             <input type="hidden" name="gameId" th:value="${gamestate.id}" />
             <input type="number" id="count" name="count" min="1" max="52" />
             <input type="submit" value="Draw Cards" />
-        </form>
+        </form> -->
 
         <form action="/game/play/backToHomepage" method="get">
             <button type="submit" class="back-button">Back to homepage</button>
@@ -26,25 +26,36 @@
 
     <p>5 Gleiche: 16x</p>
     <p>4 Gleiche: 8x</p>
-    <p>Full House: 5x</p>
-    <p>Drei Gleiche: 3x</p>
-    <p>Zwei Gleiche: 2x</p>
+    <p>Full House: 6x</p>
+    <p>Drei Gleiche: 4x</p>
+    <p>Zwei Paare: 3x</p>
+    <p>Ein Paar: 2x</p>
     <br>
     <p>Ass > König > Dame > Bube > 10 > 9</p>
 
 
     <div class="opponent-card-container" th:if="${opponent_hand != null}">
         <div th:each="card : ${opponent_hand}">
-            <img id="card-back" src="https://www.deckofcardsapi.com/static/img/back.png" class="card"></img>
-            <img id="card-front" th:src="${card.image}" class="card"></img>
+            <img src="https://www.deckofcardsapi.com/static/img/back.png" class="card card-back"></img>
+            <img th:src="${card.image}" class="card card-front"></img>
         </div>
     </div>
 
-    <form action="/game/play/exchangeCards" method="get" onsubmit="getSelectedCardCodes(); removeCards();">
-        <input type="hidden" name="gameId" th:value="${gamestate.id}" />
-        <input type="hidden" id="cardCodes" name="cardCodes" />
-        <button type="submit" class="exchange-button" id="exchange-button">Karten halten</button>
-    </form>
+    <div>
+        <form action="/game/play/exchangeCards" method="get" onsubmit="getSelectedCardCodes(); disableButton();">
+            <input type="hidden" name="gameId" th:value="${gamestate.id}" />
+            <input type="hidden" id="cardCodes" name="cardCodes" />
+            <button type="submit" class="exchange-button" id="exchange-button">Karten halten</button>
+        </form>
+
+        <button type="button" id="compare-button">Karten vergleichen</button>
+        
+        <form action="/game/play" method="get">
+            <input type="hidden" name="gameId" th:value="${gamestate.id}" />
+            <button type="submit" class="new-round-button">Neue Runde</button>
+        </form>
+    </div>
+    
 
     <div class="card-container" th:if="${player_hand != null}">
         <div th:each="card : ${player_hand}">

@@ -1,11 +1,13 @@
 var selectedCards = [];
 
 window.onload = function() {
-    document.getElementById("exchange-button").addEventListener("click", function() {
-        var cardBack = document.getElementById("card-back");
-        var cardFront = document.getElementById("card-front");
-        cardBack.style.display = "none";
-        cardFront.style.display = "block";
+    document.getElementById("compare-button").addEventListener("click", function() {
+        var cardBacks = document.getElementsByClassName("card-back");
+        var cardFronts = document.getElementsByClassName("card-front");
+        for(var i = 0; i < cardBacks.length; i++) {
+            cardBacks[i].style.display = "none";
+            cardFronts[i].style.display = "block";
+        }
         console.log("clicked");
     });
 }
@@ -38,17 +40,17 @@ function selectCard(cardId) {
     setSelectButtonValue();
 }
 
-function removeCards() {
+// function removeCards() {
    
-    var countInput = document.getElementById("count");
-    countInput.value = selectedCards.length;
-    // Entfernt die ausgewählten Karten und zieht neue Karten
-    for (var i = 0; i < selectedCards.length; i++) {
-        var cardElement = document.getElementById(selectedCards[i]);
+//     var countInput = document.getElementById("count");
+//     countInput.value = selectedCards.length;
+//     // Entfernt die ausgewählten Karten und zieht neue Karten
+//     for (var i = 0; i < selectedCards.length; i++) {
+//         var cardElement = document.getElementById(selectedCards[i]);
         
-        cardElement.parentNode.removeChild(cardElement);
-    }
-}
+//         cardElement.parentNode.removeChild(cardElement);
+//     }
+// }
 
 function getSelectedCardCodes() {
     var cardCodes = "";
@@ -64,6 +66,26 @@ function getSelectedCardCodes() {
 
     var cardCodesInput = document.getElementById('cardCodes');
     cardCodesInput.value = cardCodes;
+}
+
+function disableButton() {
+    document.getElementById("exchange-button").disabled = true;
+}
+
+function compareCards() {
+    // Logik zum Vergleichen der Karten
+    // ...
+
+    // Ergebnis der Vergleichslogik
+    let playerWon;
+
+    // Nachricht anzeigen
+    let messageElement = document.getElementById('message');
+    if (playerWon) {
+        messageElement.textContent = "Spieler hat gewonnen!";
+    } else {
+        messageElement.textContent = "Gegner hat gewonnen!";
+    }
 }
 
 

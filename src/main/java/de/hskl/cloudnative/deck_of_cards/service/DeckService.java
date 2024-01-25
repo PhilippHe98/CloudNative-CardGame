@@ -44,4 +44,9 @@ public class DeckService {
         String url = apiUrl + "/" + deckId + "/return/?cards=" + cards;
         return restTemplate.getForObject(url, Deck.class);
     }
+
+    public void shuffleDeck(String deck_id) {
+        String url = apiUrl + "/" + deck_id + "/shuffle/";
+        restTemplate.getForObject(url, Deck.class);
+    }
 }
