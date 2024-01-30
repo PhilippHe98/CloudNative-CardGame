@@ -44,11 +44,11 @@
     <div>
         <form action="/game/play/exchangeCards" method="get" onsubmit="getSelectedCardCodes(); disableButton();">
             <input type="hidden" name="gameId" th:value="${gamestate.id}" />
-            <input type="hidden" id="cardCodes" name="cardCodes" />
-            <button type="submit" class="exchange-button" id="exchange-button">Karten halten</button>
+            <input type="hidden" id="cardsToExchange" name="cardCodes" />
+            <button type="submit" class="exchange-button" id="exchange-button" onclick=disableButton()>Karten halten</button>
         </form>
 
-        <button type="button" id="compare-button">Karten vergleichen</button>
+        <button type="button" id="compare-button" onclick=compareCards()>Karten vergleichen</button>
         
         <form action="/game/play" method="get">
             <input type="hidden" name="gameId" th:value="${gamestate.id}" />
@@ -60,7 +60,7 @@
     <div class="card-container" th:if="${player_hand != null}">
         <div th:each="card : ${player_hand}">
             <img th:src="${card.image}" th:id="'card-'+${card.handPositionId}" alt="Card image" class="card"
-                onclick=selectCard(this.id) th:data-card-code="${card.code}">
+                onclick=selectCard(this.id) th:data-playerCard-code="${card.code}">
         </div>
     </div>
 </body>
