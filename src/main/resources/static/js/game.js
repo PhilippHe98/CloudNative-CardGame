@@ -81,7 +81,7 @@ function compareCards() {
     let quintuples = 0;
 
     var cardCodes = [];
-    var cardCodesCounter = [];
+    var cardCodesCounterList = [];
 
 
     for (i = 0; i < playerHand.length; i++) {
@@ -89,7 +89,7 @@ function compareCards() {
         // Is the card code already in the cardCodes array?
         currentCardCode = playerHand[i]
         if (cardCodes.includes(currentCardCode)) {
-            break;
+            continue;
         } else {
             // If not, add it to the array and count how many times it occurs in the playerHand
             cardCodes.push(playerHand[i]);
@@ -103,13 +103,15 @@ function compareCards() {
             }
 
             // Add currentCardValueCounter to cardCodesCounter array
-            cardCodesCounter.push(currentCardValueCounter);
+            cardCodesCounterList.push(currentCardValueCounter);
+            
         }
     }
+    console.log(cardCodesCounterList);
 
     // Count how many pairs, triples, quadruples and quintuples there are based on the cardCodesCounter array
-    for(i = 0; i < cardCodesCounter.length; i++) {
-        switch(cardCodesCounter[i]) {
+    for(i = 0; i < cardCodesCounterList.length; i++) {
+        switch(cardCodesCounterList[i]) {
             case 2:
                 pairs++;
                 break;
@@ -129,7 +131,7 @@ function compareCards() {
     if(triples != 0 && pairs == 0) console.log("Triples: " + triples);
     if(quadruples != 0) console.log("Quadruples: " + quadruples);
     if(quintuples != 0) console.log("Quintuples: " + quintuples);
-    if(pairs != 0 && triples != 0) console.log("Full House: " + fullHouse);
+    if(pairs != 0 && triples != 0) console.log("Full House: ");
     if(pairs == 0 && triples == 0 && quadruples == 0 && quintuples == 0) console.log("Nothing");
 
 }
