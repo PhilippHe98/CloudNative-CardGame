@@ -21,7 +21,7 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/account/register**", "/error", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/", "/register**", "/error","/js/registration.js" ,"/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(EndpointRequest.toAnyEndpoint().excluding("health")).hasRole("ADMIN")  // Restrict access to other Actuator endpoints
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())

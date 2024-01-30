@@ -10,14 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @Controller
-@RequestMapping("/account")
 @AllArgsConstructor
 public class UserController {
 
@@ -27,7 +25,9 @@ public class UserController {
     @GetMapping("/register")
     public String register(Model model, @RequestParam(required = false) String error) {
         model.addAttribute("user", new AuthUser());
-        model.addAttribute("error", error);
+        if (error != null) {
+            model.addAttribute("error", error);
+        }
         return "registration";
     }
 
@@ -38,19 +38,19 @@ public class UserController {
 
         if (result.hasErrors()) {
             System.out.println("Error binding user: " + result.getAllErrors());
-            return "redirect:/account/register?error=true";
+            return "redirect:/register?error=Fehler beim Registrieren";
         }
         try {
             if (userRepository.findByEmail(user.getEmail()).isPresent()) {
                 System.out.println("Email already exists");
-                return "redirect:/account/register?error=true";
+                return "redirect:/register?error=Email wird bereits verwendet";
             }
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.addRole("ROLE_USER");
             userRepository.save(user);
             return "redirect:/game/start";
         } catch (Exception e) {
-            return "redirect:/account/register?error=true";
+            return "redirect:/register?error=true";
         }
 
     }
@@ -69,7 +69,7 @@ public class UserController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
-    
+
     @Controller
     public static class initController {
         @GetMapping("/")
