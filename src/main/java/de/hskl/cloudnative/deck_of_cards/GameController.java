@@ -29,9 +29,12 @@ public class GameController {
     private UserService userService;
 
     @GetMapping("/start")
-    public String loadStartPage(Model model) {
+    public String loadStartPage(Model model, @RequestParam(required = false) String errorMessage){
         List<GameState> allGames = gameStateService.findAllGames();
         model.addAttribute("games", allGames);
+
+        if(errorMessage != null) model.addAttribute("errorMessage", errorMessage);
+
         return "start";
     }
 
@@ -56,24 +59,25 @@ public class GameController {
 
         GameState game = gameStateService.find(gameId);
         AuthUser currentUser = userService.getCurrentUser();
-
-        // Prüft autorisierung
+        // Is user authorized to delete the game?
         if (game.getUser().getEmail().equals(currentUser.getUsername())
                 || currentUser.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             gameStateService.delete(gameId);
+            return "redirect:/game/start";
         }
 
-        return "redirect:/game/start";
+        return "redirect:/game/start?errorMessage=You are not authorized to delete this game!";
     }
 
     @GetMapping("/play")
     public String redirectToGame(@RequestParam("gameId") String gameId, Model model) {
+
         GameState game = gameStateService.find(gameId);
         AuthUser currentUser = userService.getCurrentUser();
 
-        // Prüft autorisierung
+        // Is user authorized to play the game?
         if (!game.getUser().getEmail().equals(currentUser.getUsername())) {
-            return "redirect:/game/start";
+            return "redirect:/game/start?errorMessage=You are not authorized to play this game!";
         }
 
         Deck currentDeck = game.getDeck();
@@ -104,6 +108,7 @@ public class GameController {
         model.addAttribute("gamestate", game);
         model.addAttribute("player_hand", player_hand);
         model.addAttribute("opponent_hand", opponent_hand);
+        model.addAttribute("exchanged", false);
 
         return "play";
     }
@@ -182,6 +187,7 @@ public class GameController {
         model.addAttribute("deck", currentDeck);
         model.addAttribute("player_hand", gameState.getPlayer_hand());
         model.addAttribute("opponent_hand", oppnent_hand);
+        model.addAttribute("exchanged", true);
         return "play";
 
         // return "redirect:/game/play/drawCards?gameId=" + gameId + "&count=" +

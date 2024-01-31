@@ -1,3 +1,17 @@
+html {
+    height: 100%;
+}
+
+body {
+    color: white;
+    background-image: url('https://vistapointe.net/images/poker-5.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-size: 15pt;
+    margin: 0;
+}
+
 .card-container {
     display: flex;
     flex-direction: row;
@@ -11,8 +25,8 @@
 
 .exchange-button {
     position: fixed;
-    right: 350pt;
-    bottom: 230pt; /* Adjust this value based on the height of your cards */
+    right: 390pt;
+    bottom: 210pt; /* Adjust this value based on the height of your cards */
     width: 200pt; /* Adjust this value to change the width of the button */
     height: 50pt; /* Adjust this value to change the height of the button */
     font-size: 20pt; /* Adjust this value to change the font size of the button text */
@@ -20,10 +34,17 @@
 
 #compare-button {
     position: fixed;
-    right: 150pt;
-    bottom: 230pt; /* Adjust this value based on the height of your cards */
+    right: 190pt;
+    bottom: 210pt; /* Adjust this value based on the height of your cards */
     width: 200pt; /* Adjust this value to change the width of the button */
     height: 50pt; /* Adjust this value to change the height of the button */
+    font-size: 20pt; /* Adjust this value to change the font size of the button text */
+}
+
+.new-round-button {
+    position: fixed;
+    right: 335pt;
+    bottom: 270pt; /* Adjust this value based on the height of your cards */
     font-size: 20pt; /* Adjust this value to change the font size of the button text */
 }
 
@@ -40,7 +61,7 @@
 
 .card {
     margin: 1pt;
-    width: 200px;
+    width: 180px;
     height: auto;
 }
 
@@ -60,4 +81,16 @@
 
 .card-back {
     display: block;
+}
+
+.new-round-button {
+    display: none;
+}
+
+#gameResult {
+    position: fixed;
+    left: 50pt;
+    bottom: 50pt;
+    margin-right: 50pt;
+    font-size: 20pt;
 }

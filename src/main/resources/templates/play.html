@@ -4,21 +4,18 @@
 
 <head>
     <title>Card Game</title>
-    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/game.css}" rel="stylesheet" />
     <script th:src="@{/js/game.js}"></script>
 </head>
 
 <body>
+
+    <p style="background-image: url('https://vistapointe.net/images/poker-5.jpg');"></p>
+
     <h1 th:text="'Game: ' + ${gamestate.id}"></h1>
     <p th:text="'Remaining cards in deck: ' + ${gamestate.deck.remaining}"></p>
 
     <div>
-        <!-- <form action="/game/play/drawCards" method="get">
-            <input type="hidden" name="gameId" th:value="${gamestate.id}" />
-            <input type="number" id="count" name="count" min="1" max="52" />
-            <input type="submit" value="Draw Cards" />
-        </form> -->
-
         <form action="/game/play/backToHomepage" method="get">
             <button type="submit" class="back-button">Back to homepage</button>
         </form>
@@ -37,23 +34,23 @@
     <div class="opponent-card-container" th:if="${opponent_hand != null}">
         <div th:each="card : ${opponent_hand}">
             <img src="https://www.deckofcardsapi.com/static/img/back.png" class="card card-back"></img>
-            <img th:src="${card.image}" class="card card-front"></img>
+            <img th:src="${card.image}" class="card card-front" th:data-opponentCard-code="${card.code}"></img>
         </div>
     </div>
 
     <div>
-        <form action="/game/play/exchangeCards" method="get" onsubmit="getSelectedCardCodes(); disableButton();">
+        <form action="/game/play/exchangeCards" method="get" onsubmit="getSelectedCardCodes();">
             <input type="hidden" name="gameId" th:value="${gamestate.id}" />
             <input type="hidden" id="cardsToExchange" name="cardCodes" />
-            <button type="submit" class="exchange-button" id="exchange-button" onclick=disableButton()>Karten halten</button>
+            <button th:if="${!exchanged}" type="submit" class="exchange-button" id="exchange-button" disabled="true" onclick=disableButton()>Karten tauschen</button>
+        </form>
+
+        <form action="/game/play" method="get">
+            <input type="hidden" name="gameId" th:value="${gamestate.id}" />
+            <button type="submit" class="new-round-button">Next Round</button>
         </form>
 
         <button type="button" id="compare-button" onclick=compareCards()>Karten vergleichen</button>
-        
-        <form action="/game/play" method="get">
-            <input type="hidden" name="gameId" th:value="${gamestate.id}" />
-            <button type="submit" class="new-round-button">Neue Runde</button>
-        </form>
     </div>
     
 
@@ -62,6 +59,10 @@
             <img th:src="${card.image}" th:id="'card-'+${card.handPositionId}" alt="Card image" class="card"
                 onclick=selectCard(this.id) th:data-playerCard-code="${card.code}">
         </div>
+    </div>
+
+    <div id="gameResult">
+        <p id="gameResultText"></p>
     </div>
 </body>
 

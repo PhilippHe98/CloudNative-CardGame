@@ -1,0 +1,29 @@
+#logout-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20pt;
+}
+
+#newGame {
+    font-size: 20pt;
+}
+
+body {
+    color: white;
+    background-image: url('https://vistapointe.net/images/poker-5.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-size: 15pt;
+}
+
+.game {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 10px;
+}
+
+.button {
+    font-size: 15pt;
+}

@@ -3,26 +3,25 @@
 
 <head>
     <title>Starting Page</title>
+    <link th:href="@{/css/homepage.css}" rel="stylesheet" />
 </head>
 
 <body>
-    <div th:if="${deck != null}">
-        <p th:text="'Deck ID: ' + ${deck.deck_id}"></p>
-        <p th:text="'Remaining cards: ' + ${deck.remaining}"></p>
+    <form action="/logout" method="get">
+        <input type="submit" value="Logout" id="logout-button">
+    </form>
+
+    <h1>List of all games</h1>
+    <div th:if="${errorMessage}">
+        <p th:text=${errorMessage} style="color: red"></p>
     </div>
 
-    <h1>Game State Information</h1>
-
-    <div th:if="${gamestate != null}">
-        <p th:text="'Game ID: ' + ${gamestate.id}"></p>
-        <p th:text="'Player: ' + ${gamestate.user.firstName} + ' ' + ${gamestate.user.lastName}"></p>
-        <p th:text="'Deck ID: ' + ${gamestate.deck.deck_id} + ' Remaining: ' + ${gamestate.deck.remaining}"></p>
-    </div>
-
-    <h1>All Games</h1>
+    <form action="start/create-game" method="post">
+        <input type="submit" value="Create new game" id="newGame">
+    </form>
 
     <div th:if="${games != null}">
-        <div th:each="game : ${games}">
+        <div class="game" th:each="game : ${games}">
             <p th:text="'Game ID: ' + ${game.id}"></p>
             <p th:text="'Player: ' + ${game.user.firstName} + ' ' + ${game.user.lastName}"></p>
             <div th:if="${game.deck != null}">
@@ -32,11 +31,11 @@
             <div style="display: flex; flex-wrap: wrap;">
                 <form action="play" method="get" style="margin-right: 10px;">
                     <input type="hidden" name="gameId" th:value="${game.id}" />
-                    <input type="submit" value="Play" />
+                    <input type="submit" value="Play" class="button"/>
                 </form>
                 <form action="start/delete-game" method="post" th:object="${game}">
                     <input type="hidden" name="gameId" th:value="${game.id}" />
-                    <input type="submit" value="Delete" />
+                    <input type="submit" value="Delete" class="button"/>
                 </form>
             </div>
 
@@ -44,9 +43,7 @@
         </div>
     </div>
 
-    <form action="start/create-game" method="post">
-        <input type="submit" value="Neues Spiel erstellen">
-    </form>
+
 </body>
 
 </html>
