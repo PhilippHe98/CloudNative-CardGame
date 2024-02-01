@@ -34,7 +34,6 @@ public class GameController {
     public String loadStartPage(Model model, @RequestParam(required = false) String errorMessage) {
         List<GameState> allGames = gameStateService.findAllGames();
         model.addAttribute("games", allGames);
-
         if (errorMessage != null)
             model.addAttribute("errorMessage", errorMessage);
 
@@ -51,6 +50,7 @@ public class GameController {
         GameState gameState = GameState.builder()
                 .deck(currentDeck)
                 .user(currentUser)
+                .coins(5)
                 .build();
         gameStateService.save(gameState);
         model.addAttribute("deck", currentDeck);

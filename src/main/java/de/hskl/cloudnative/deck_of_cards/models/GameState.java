@@ -23,5 +23,5 @@ public class GameState {
     private AuthUser user;
     private List<Card> player_hand;
     private List<Card> opponent_hand;
-    private String coins;
+    private int coins;
 }

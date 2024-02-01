@@ -27,7 +27,13 @@
     <p>Zwei Paare: 3x</p>
     <p>Ein Paar: 2x</p>
     <br>
-    <p>Ass > König > Dame > Bube > 10 > 9</p>
+    <p>Ass > König > Dame > Bube > 10 > 9</p><br>
+
+    <p th:text="'Münzen: ' + ${gamestate.coins}"></p>
+    <div>
+        <label for="coins">Einsatz: </label>
+        <input type="number" id="coins" name="coins" min="1" th:max="${gamestate.coins}" value="1">
+    </div>
 
     <div class="opponent-card-container" th:if="${opponent_hand != null}">
         <div th:each="card : ${opponent_hand}">
@@ -45,7 +51,7 @@
 
         <form action="/game/play" method="get">
             <input type="hidden" name="gameId" th:value="${gamestate.id}" />
-            <button type="submit" class="new-round-button">Next Round</button>
+            <button type="submit" class="new-round-button">Neue Runde</button>
         </form>
 
         <button type="button" id="compare-button" onclick=compareCards()>Karten vergleichen</button>
@@ -61,7 +67,7 @@
 
     <div id="gameResult">
         <p id="gameResultText"></p>
-    </div>
+    </div> 
 </body>
 
 </html>
