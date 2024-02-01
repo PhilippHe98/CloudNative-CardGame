@@ -19,4 +19,10 @@ Nachdem die ausgewählten Karten getauscht wurden, verschwindet der "Karten Taus
 ![image](https://github.com/PhilippHe98/CloudNative-CardGame/assets/79371575/9c95fc86-99ba-4134-b0cd-79b4231eb2be)
 Mit dem "Back to Homepage" Button oben rechts wird man dann wieder zur Startseite weitergeleitet.
 
+Unter /swagger-ui/index.html#/ werden die Endpunkte dokumentiert.
+![image](https://github.com/PhilippHe98/CloudNative-CardGame/assets/79371575/fe58ba3b-ae44-40a6-95ba-a570344c5b37)
+
+
+
+
 
