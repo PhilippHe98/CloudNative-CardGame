@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
@@ -22,6 +24,7 @@ public class UserController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Operation(summary = "Show  the login page")
     @GetMapping("/register")
     public String register(Model model, @RequestParam(required = false) String error) {
         model.addAttribute("user", new AuthUser());
@@ -31,11 +34,9 @@ public class UserController {
         return "registration";
     }
 
+    @Operation(summary = "Register a new user")
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute AuthUser user, BindingResult result) {
-
-        System.out.println(user);
-
         if (result.hasErrors()) {
             System.out.println("Error binding user: " + result.getAllErrors());
             return "redirect:/register?error=Fehler beim Registrieren";
@@ -55,6 +56,7 @@ public class UserController {
 
     }
 
+    @Operation(summary = "Register a new user. Used for testing purposes with postman")
     @PostMapping("/user/register")
     public ResponseEntity<String> registerUser(@RequestBody AuthUser user) {
         System.out.println(user);
@@ -67,14 +69,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
-        }
-    }
-
-    @Controller
-    public static class initController {
-        @GetMapping("/")
-        public String init() {
-            return "redirect:/game/start";
         }
     }
 }

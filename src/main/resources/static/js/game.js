@@ -83,8 +83,6 @@ function disableButton() {
 }
 
 function compareCards(cards) {
-
-    
     // Makes next round button visible
     document.querySelector('.new-round-button').style.display = 'block';
 

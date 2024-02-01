@@ -17,6 +17,7 @@ import de.hskl.cloudnative.deck_of_cards.service.DeckService;
 import de.hskl.cloudnative.deck_of_cards.service.GameStateService;
 import de.hskl.cloudnative.security.AuthUser;
 import de.hskl.cloudnative.security.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -28,19 +29,22 @@ public class GameController {
     private GameStateService gameStateService;
     private UserService userService;
 
+    @Operation(summary = "Loads the start page with all games from the database")
     @GetMapping("/start")
-    public String loadStartPage(Model model, @RequestParam(required = false) String errorMessage){
+    public String loadStartPage(Model model, @RequestParam(required = false) String errorMessage) {
         List<GameState> allGames = gameStateService.findAllGames();
         model.addAttribute("games", allGames);
 
-        if(errorMessage != null) model.addAttribute("errorMessage", errorMessage);
+        if (errorMessage != null)
+            model.addAttribute("errorMessage", errorMessage);
 
         return "start";
     }
 
+    @Operation(summary = "Creates a new game but user stays on the start page")
     @PostMapping("/start/create-game")
     public String startNewGame(Model model) {
-        // Deck currentDeck = deckService.createNewDeck();
+
         Deck currentDeck = deckService.createPartialDeck(
                 "9H,9H,9H,9H,9H,0S,0S,0S,0S,0S,JD,JD,JD,JD,JD,QC,QC,QC,QC,QC,KH,KH,KH,KH,KH,AS,AS,AS,AS,AS");
         AuthUser currentUser = userService.getCurrentUser();
@@ -54,14 +58,16 @@ public class GameController {
         return "redirect:/game/start";
     }
 
+    @Operation(summary = "Deletes a game from the database")
     @PostMapping("/start/delete-game")
     public String deleteGame(@RequestParam String gameId) {
 
         GameState game = gameStateService.find(gameId);
         AuthUser currentUser = userService.getCurrentUser();
         // Is user authorized to delete the game?
-        if (game.getUser().getEmail().equals(currentUser.getUsername())
-                || currentUser.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+        if (game.getUser().getEmail().equals(currentUser.getUsername()) ||
+                currentUser.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+                    
             gameStateService.delete(gameId);
             return "redirect:/game/start";
         }
@@ -69,6 +75,7 @@ public class GameController {
         return "redirect:/game/start?errorMessage=You are not authorized to delete this game!";
     }
 
+    @Operation(summary = "Redirects from the start page to the play page and draws 5 cards from the deck for the player and the opponent")
     @GetMapping("/play")
     public String redirectToGame(@RequestParam("gameId") String gameId, Model model) {
 
@@ -113,31 +120,7 @@ public class GameController {
         return "play";
     }
 
-    @GetMapping("/play/drawCards")
-    public String drawCards(@RequestParam("gameId") String gameId, @RequestParam("count") int count, Model model) {
-        // Get the deck from game
-        GameState gameState = gameStateService.find(gameId);
-        Deck currentDeck = gameState.getDeck();
-
-        // Draw Cards from current deck
-        DrawCards cardsDrawn = deckService.drawCardsFromDeck(currentDeck.getDeck_id(), count);
-        List<Card> cards = cardsDrawn.getCards();
-
-        // Gives Every Card a id for the hand, card with smallest id is the first card
-        for (int i = 0; i < cards.size(); i++) {
-            cards.get(i).setHandPositionId(i);
-        }
-
-        // Update the game state with the drawn cards
-        currentDeck.setRemaining(cardsDrawn.getRemaining());
-        gameStateService.save(gameState);
-
-        model.addAttribute("gamestate", gameState);
-        model.addAttribute("deck", currentDeck);
-        model.addAttribute("cards", cards);
-        return "play";
-    }
-
+    @Operation(summary = "After the player has selected the cards to exchange, this endpoint will exchange the cards and draw new cards from the deck and reload the play page")
     @GetMapping("/play/exchangeCards")
     public String exchangeCards(@RequestParam("gameId") String gameId, @RequestParam("cardCodes") String cards,
             Model model) {
@@ -170,7 +153,7 @@ public class GameController {
             // Add new cards to player hand and update game state
             player_hand.addAll(newCards);
             sortCards(player_hand);
-            
+
             for (int i = 0; i < player_hand.size(); i++) {
                 player_hand.get(i).setHandPositionId(i);
             }
@@ -189,21 +172,9 @@ public class GameController {
         model.addAttribute("opponent_hand", oppnent_hand);
         model.addAttribute("exchanged", true);
         return "play";
-
-        // return "redirect:/game/play/drawCards?gameId=" + gameId + "&count=" +
-        // numberOfCardsToExchange;
     }
 
-    // TODO: Implementieren
-    public String compareCards(Model model, String player_hand, String opponent_hand) {
-        // Prüfe, welche Karten besser sind
-        // 5 gleiche Karten > 4 gleiche Karten > Full House > 3 gleiche Karten > 2
-        // gleiche Karten > 1 gleiche Karte
-        // Ace > King > Queen > Jack > 10 > 9
-
-        return "play";
-    }
-
+    @Operation(summary = "Redirects to the start page")
     @GetMapping("/play/backToHomepage")
     public String backToHomepage() {
         return "redirect:/game/start";
@@ -216,6 +187,7 @@ public class GameController {
             int intA = 0;
             int intB = 0;
 
+            // Transforms named values to int
             if (valueA.equals("ACE")) {
                 intA = 14;
             } else if (valueA.equals("KING")) {
@@ -246,6 +218,32 @@ public class GameController {
 
             return intA - intB;
         });
+    }
+
+    @Operation(summary = "Draws cards from the deck and reloads the play page. But not in use currently")
+    @GetMapping("/play/drawCards")
+    public String drawCards(@RequestParam("gameId") String gameId, @RequestParam("count") int count, Model model) {
+        // Get the deck from game
+        GameState gameState = gameStateService.find(gameId);
+        Deck currentDeck = gameState.getDeck();
+
+        // Draw Cards from current deck
+        DrawCards cardsDrawn = deckService.drawCardsFromDeck(currentDeck.getDeck_id(), count);
+        List<Card> cards = cardsDrawn.getCards();
+
+        // Gives Every Card a id for the hand, card with smallest id is the first card
+        for (int i = 0; i < cards.size(); i++) {
+            cards.get(i).setHandPositionId(i);
+        }
+
+        // Update the game state with the drawn cards
+        currentDeck.setRemaining(cardsDrawn.getRemaining());
+        gameStateService.save(gameState);
+
+        model.addAttribute("gamestate", gameState);
+        model.addAttribute("deck", currentDeck);
+        model.addAttribute("cards", cards);
+        return "play";
     }
 
     /*

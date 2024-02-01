@@ -9,7 +9,6 @@
 </head>
 
 <body>
-
     <p style="background-image: url('https://vistapointe.net/images/poker-5.jpg');"></p>
 
     <h1 th:text="'Game: ' + ${gamestate.id}"></h1>
@@ -29,7 +28,6 @@
     <p>Ein Paar: 2x</p>
     <br>
     <p>Ass > König > Dame > Bube > 10 > 9</p>
-
 
     <div class="opponent-card-container" th:if="${opponent_hand != null}">
         <div th:each="card : ${opponent_hand}">
